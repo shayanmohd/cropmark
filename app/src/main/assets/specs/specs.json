@@ -1,0 +1,77 @@
+{
+  "format": 1,
+  "specs": [
+    {
+      "id": "us-passport", "name": "US passport", "country": "United States", "countryCode": "US",
+      "print": { "widthMm": 50.8, "heightMm": 50.8, "label": "2 x 2 in" },
+      "headMm": { "min": 25.4, "max": 34.9 }, "eyeMm": { "min": 28.6, "max": 34.9 },
+      "backgrounds": ["white"],
+      "editsAllowed": false,
+      "notes": "2 x 2 in, head 1 to 1 3/8 in from chin to top of hair, eyes 1 1/8 to 1 3/8 in above the bottom edge. Plain white or off-white background with no shadows. No glasses. Print on matte or glossy photo paper.",
+      "sourceUrl": "https://travel.state.gov/en/passports/apply/help/photos.html", "verifiedOn": "2026-09-14"
+    },
+    {
+      "id": "us-ds160", "name": "US visa, DS-160 upload", "country": "United States", "countryCode": "US",
+      "digital": { "minPx": 600, "maxPx": 1200, "aspectW": 1, "aspectH": 1, "maxKb": 240, "maxCompression": 20 },
+      "headPct": { "min": 50, "max": 69 }, "eyePct": { "min": 56, "max": 69 },
+      "backgrounds": ["white"],
+      "editsAllowed": false,
+      "notes": "Square colour JPEG from 600 x 600 to 1200 x 1200 px, 240 KB or less, compressed no more than 20 to 1. Head 50 to 69 percent of the height, eyes 56 to 69 percent up from the bottom. Plain white or off-white background.",
+      "sourceUrl": "https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/photos/digital-image-requirements.html", "verifiedOn": "2026-09-14"
+    },
+    {
+      "id": "in-passport", "name": "India passport, applying abroad", "country": "India", "countryCode": "IN",
+      "digital": { "minPx": 630, "maxPx": 630, "aspectW": 630, "aspectH": 810, "maxKb": 250 },
+      "headPct": { "min": 80, "max": 85 },
+      "backgrounds": ["white"],
+      "editsAllowed": false,
+      "notes": "For passport applications made through an Indian embassy or consulate: a 630 x 810 px colour photo of 250 KB or less, face filling 80 to 85 percent of the photo, white background, glasses off. In India, the Passport Seva Kendra takes the photo at the counter.",
+      "sourceUrl": "https://www.hciwellington.gov.in/page/changes-in-indian-passport/", "verifiedOn": "2026-09-14"
+    },
+    {
+      "id": "in-evisa", "name": "India e-Visa", "country": "India", "countryCode": "IN",
+      "digital": { "minPx": 350, "maxPx": 1000, "aspectW": 1, "aspectH": 1, "minKb": 10, "maxKb": 1024 },
+      "icaoDefault": true,
+      "backgrounds": ["white"],
+      "notes": "Square JPEG, 10 KB to 1 MB, from 350 x 350 to 1000 x 1000 px. Full face, front view, eyes open, no spectacles, full head from top of hair to chin. Plain light coloured or white background with no shadows or border.",
+      "sourceUrl": "https://indianvisaonline.gov.in/evisa/tvoa.html", "verifiedOn": "2026-09-14"
+    },
+    {
+      "id": "in-oci", "name": "India OCI card", "country": "India", "countryCode": "IN",
+      "digital": { "minPx": 200, "maxPx": 900, "aspectW": 1, "aspectH": 1, "maxKb": 200 },
+      "headPct": { "min": 49, "max": 69 }, "eyePct": { "min": 56, "max": 69 },
+      "backgrounds": ["light_grey"],
+      "editsAllowed": false,
+      "notes": "Square JPEG from 200 x 200 to 900 x 900 px, 200 KB or less. Plain light coloured background, not white. Head 1 to 1 3/8 in on a 2 x 2 in photo, eyes 1 1/8 to 1 3/8 in up. Do not retouch or enhance the photo.",
+      "sourceUrl": "https://ociservices.gov.in/onlineOCI/faq", "verifiedOn": "2026-09-14"
+    },
+    {
+      "id": "in-pan", "name": "India PAN card", "country": "India", "countryCode": "IN",
+      "print": { "widthMm": 25, "heightMm": 35, "label": "25 x 35 mm" },
+      "digital": { "minPx": 197, "maxPx": 197, "aspectW": 25, "aspectH": 35, "maxKb": 20 },
+      "dpi": 200,
+      "icaoDefault": true,
+      "backgrounds": ["white"],
+      "notes": "Colour photo 3.5 x 2.5 cm. The online application takes a colour JPEG scanned at 200 dpi, 20 KB or less. The issuer names no background colour; white is the safe choice.",
+      "sourceUrl": "https://tin.tin.proteantech.in/pan/InstructionDSC.html", "verifiedOn": "2026-09-14"
+    },
+    {
+      "id": "ca-visa", "name": "Canada visitor visa", "country": "Canada", "countryCode": "CA",
+      "print": { "widthMm": 35, "heightMm": 45, "label": "35 x 45 mm" },
+      "headMm": { "min": 31, "max": 36 },
+      "backgrounds": ["white"],
+      "editsAllowed": false,
+      "crownAtSkull": true,
+      "notes": "At least 35 x 45 mm on quality photo paper, head 31 to 36 mm from chin to crown, face in the middle with the top of the shoulders showing. Crown means the top of the skull, so hair piled high does not count. Plain white or light background.",
+      "sourceUrl": "https://www.canada.ca/en/immigration-refugees-citizenship/services/application/application-forms-guides/temporary-resident-visa-application-photograph-specifications.html", "verifiedOn": "2026-09-14"
+    },
+    {
+      "id": "cn-visa", "name": "China visa", "country": "China", "countryCode": "CN",
+      "print": { "widthMm": 33, "heightMm": 48, "label": "33 x 48 mm" },
+      "headMm": { "min": 28, "max": 33 },
+      "backgrounds": ["white"],
+      "notes": "33 x 48 mm colour photo, head 28 to 33 mm high and 15 to 22 mm wide, ears visible, white or near white background with no border. Print on glossy photo paper.",
+      "sourceUrl": "https://www.visaforchina.cn/SYD3_EN/qianzhengyewu/jichuzhishi/changjianwenti/355135188537315328.html", "verifiedOn": "2026-09-14"
+    }
+  ]
+}

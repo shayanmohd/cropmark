@@ -1,0 +1,18 @@
+Licences
+
+MediaPipe Tasks Vision library
+Copyright The MediaPipe Authors. Apache License, Version 2.0.
+
+Face Landmarker model (face_landmarker.task) and Selfie Segmenter model (selfie_segmenter.tflite)
+Google MediaPipe models, bundled unchanged. Apache License, Version 2.0.
+
+AndroidX, Jetpack Compose, CameraX, Room, DataStore, Kotlin and kotlinx libraries
+Apache License, Version 2.0.
+
+Google Play In-App Review library
+Play Core Software Development Kit Terms of Service.
+
+You may obtain a copy of the Apache License, Version 2.0 at apache.org/licenses/LICENSE-2.0
+
+Sofia Sans Condensed and Public Sans
+SIL Open Font License, Version 1.1. The full texts follow.

@@ -1,0 +1,42 @@
+{
+  "background": [
+    "#C92B77",
+    "#A81A63"
+  ],
+  "text": "#FFF7FB",
+  "frame": "#6E0F3E",
+  "font": "fonts/sofia_sans_condensed_semibold.ttf",
+  "weight": 600,
+  "shots": [
+    {
+      "src": "screenshots-raw/01-pan-frame-white.png",
+      "out": "screenshots/01-pan-frame-white.png",
+      "caption": "Sized to the rule, fully offline"
+    },
+    {
+      "src": "screenshots-raw/02-evisa-light-blue.png",
+      "out": "screenshots/02-evisa-light-blue.png",
+      "caption": "New background, hair kept"
+    },
+    {
+      "src": "screenshots-raw/03-checks-background-fix.png",
+      "out": "screenshots/03-checks-background-fix.png",
+      "caption": "Catch a rejection at home"
+    },
+    {
+      "src": "screenshots-raw/04-pan-form-file-kb.png",
+      "out": "screenshots/04-pan-form-file-kb.png",
+      "caption": "Exact KB for online forms"
+    },
+    {
+      "src": "screenshots-raw/05-print-sheet-4x6-dark.png",
+      "out": "screenshots/05-print-sheet-4x6-dark.png",
+      "caption": "Print sheets with cut lines"
+    },
+    {
+      "src": "screenshots-raw/06-history-another-size-dark.png",
+      "out": "screenshots/06-history-another-size-dark.png",
+      "caption": "Another size, no retake"
+    }
+  ]
+}

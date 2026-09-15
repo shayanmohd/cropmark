@@ -1,0 +1,27 @@
+Cropmark privacy policy
+
+Cropmark is made by SocialSure Private Limited. It works entirely on your phone.
+
+What Cropmark stores
+Photos you take or choose, the face measurements and person outline worked out from them, your edits, a record of the files you saved, custom sizes and your settings. All of it stays in Cropmark's private storage on this phone.
+
+What Cropmark sends
+Nothing. Cropmark has no internet permission, no account, no ads, no analytics and no crash reporting. Face detection and background removal run on the phone with models built into the app.
+
+Camera
+The camera permission is used to take the passport photo with the live measuring frame. Camera frames are checked in memory to place the guides and are never stored. Only the photo you take is saved.
+
+Files you save or share
+Form files and print sheets go where you save them (Pictures/Cropmark or Documents/Cropmark) or to the app you share them with. Saved files carry no location or camera data.
+
+Backups
+A backup is a zip file you save through the system file picker. It goes only where you put it. Photos are excluded from Android cloud backup.
+
+Deleting your data
+Delete one photo from its history page, or every photo from Settings, Delete all photos. Uninstalling Cropmark removes everything it stored.
+
+Reviews
+After you have saved photos on three separate days, Cropmark may ask Google Play to show its rating sheet once. Anything you write there goes to Google Play, not to Cropmark.
+
+Contact
+Use the developer contact on Cropmark's Google Play page.

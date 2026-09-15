@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108">
+  <defs>
+    <linearGradient id="ground" x1="0.12" y1="0" x2="0.88" y2="1">
+      <stop offset="0" stop-color="#D6337F"/>
+      <stop offset="1" stop-color="#B01E6A"/>
+    </linearGradient>
+    <radialGradient id="lift" cx="0.26" cy="0.18" r="0.74">
+      <stop offset="0" stop-color="#F06AA6" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#F06AA6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="paper" gradientUnits="userSpaceOnUse" x1="0" y1="26" x2="0" y2="82">
+      <stop offset="0" stop-color="#FFF4FA"/>
+      <stop offset="1" stop-color="#FBE9F2"/>
+    </linearGradient>
+    <filter id="shadow" filterUnits="userSpaceOnUse" x="0" y="0" width="108" height="108">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.1"/>
+      <feOffset dy="1.4" result="o"/>
+      <feFlood flood-color="#77103F" flood-opacity="0.38"/>
+      <feComposite in2="o" operator="in"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <g id="bg">
+    <rect width="108" height="108" fill="url(#ground)"/>
+    <rect width="108" height="108" fill="url(#lift)"/>
+  </g>
+  <g id="fg" filter="url(#shadow)">
+    <path d="M29.5 36 L37.5 36 M40 26.5 L40 33.5 M78.5 36 L70.5 36 M68 26.5 L68 33.5 M29.5 72 L37.5 72 M40 81.5 L40 74.5 M78.5 72 L70.5 72 M68 81.5 L68 74.5"
+          fill="none" stroke="url(#paper)" stroke-width="3.2" stroke-linecap="butt"/>
+    <path d="M40 36 L68 36 L68 72 L40 72 Z M54 42.4 C50.4 42.4 48.2 45.2 48.2 48.8 C48.2 52.2 49.1 55.2 50.6 57.3 C51.5 58.5 52.7 59 54 59 C55.3 59 56.5 58.5 57.4 57.3 C58.9 55.2 59.8 52.2 59.8 48.8 C59.8 45.2 57.6 42.4 54 42.4 Z M51.8 56.4 L51.8 61.6 C48.6 62.2 44.6 64.4 44.6 68 L63.4 68 C63.4 64.4 59.4 62.2 56.2 61.6 L56.2 56.4 Z"
+          fill="url(#paper)"/>
+  </g>
+  <g id="mono">
+    <path d="M29.5 36 L37.5 36 M40 26.5 L40 33.5 M78.5 36 L70.5 36 M68 26.5 L68 33.5 M29.5 72 L37.5 72 M40 81.5 L40 74.5 M78.5 72 L70.5 72 M68 81.5 L68 74.5"
+          fill="none" stroke="#000000" stroke-width="3.2" stroke-linecap="butt"/>
+    <path d="M40 36 L68 36 L68 72 L40 72 Z M54 42.4 C50.4 42.4 48.2 45.2 48.2 48.8 C48.2 52.2 49.1 55.2 50.6 57.3 C51.5 58.5 52.7 59 54 59 C55.3 59 56.5 58.5 57.4 57.3 C58.9 55.2 59.8 52.2 59.8 48.8 C59.8 45.2 57.6 42.4 54 42.4 Z M51.8 56.4 L51.8 61.6 C48.6 62.2 44.6 64.4 44.6 68 L63.4 68 C63.4 64.4 59.4 62.2 56.2 61.6 L56.2 56.4 Z"
+          fill="#000000"/>
+  </g>
+</svg>
