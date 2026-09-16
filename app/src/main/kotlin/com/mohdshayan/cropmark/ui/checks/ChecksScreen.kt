@@ -45,6 +45,7 @@ import com.mohdshayan.cropmark.core.check.CheckResult
 import com.mohdshayan.cropmark.core.check.ComplianceChecker
 import com.mohdshayan.cropmark.core.check.Guide
 import com.mohdshayan.cropmark.core.crop.FrameGuides
+import com.mohdshayan.cropmark.core.spec.BackgroundKind
 import com.mohdshayan.cropmark.core.spec.DocSpec
 import com.mohdshayan.cropmark.di.ServiceLocator
 import com.mohdshayan.cropmark.render.PhotoRenderer
@@ -54,6 +55,7 @@ import com.mohdshayan.cropmark.ui.components.PhotoWithFrame
 import com.mohdshayan.cropmark.ui.components.SkeletonBlock
 import com.mohdshayan.cropmark.ui.components.fmtMm
 import com.mohdshayan.cropmark.ui.editor.Pipeline
+import com.mohdshayan.cropmark.ui.spec.backgroundName
 import com.mohdshayan.cropmark.ui.theme.Cropmark
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -242,11 +244,32 @@ private fun describe(r: CheckResult, s: ChecksUi.Ready): Pair<String, String> {
                 if (sp.editsAllowed) "The face is too bright. Lower exposure or move away from direct light." else "The face is too bright. Move away from direct light and take it again."
         }
         CheckId.Lighting -> "Even lighting" to if (r.passed) "Both sides of the face match" else "One side of the face is darker. Face a window or a lamp."
-        CheckId.Background -> "Plain background" to if (r.passed) "Even, with no pattern" else if (r.measured == ComplianceChecker.OVERHANG) { if (sp.editsAllowed) "The photo ends inside the frame. Choose a background colour to fill it, or take it again from further back." else "The photo ends inside the frame. Take it again from further back, with wall around your head and shoulders." } else if (sp.editsAllowed) "The background is dark or patterned. Choose a plain background colour." else "The background is dark or patterned. Stand in front of a plain light wall and take it again."
+        CheckId.Background -> "Plain background" to when {
+            r.passed -> if (sp.whiteBackgroundRejected) "Even, with no pattern. This issuer wants a light colour, not white." else "Even, with no pattern"
+            r.measured == ComplianceChecker.OVERHANG ->
+                if (sp.editsAllowed) "The photo ends inside the frame. Choose a background colour to fill it, or take it again from further back."
+                else "The photo ends inside the frame. Take it again from further back, with wall around your head and shoulders."
+            r.measured == ComplianceChecker.WRONG_COLOUR ->
+                "This issuer allows ${backgroundList(sp)} only. Choose that colour."
+            r.measured == ComplianceChecker.WHITE_BACKGROUND ->
+                "The wall reads as white and this issuer rejects white. Shoot against a light grey or cream wall."
+            sp.editsAllowed -> "The background is dark or patterned. Choose a plain background colour."
+            else -> "The background is dark or patterned. Stand in front of a plain light wall and take it again."
+        }
         CheckId.Resolution -> "Pixels for ${sp.dpi} dpi" to run {
             val v = "${s.cropHeightPx} px tall for ${s.outputHeightPx} px"
             if (r.passed) v else "$v. Move closer or use the back camera."
         }
+    }
+}
+
+/** The colours this issuer names, written out: "white", or "white or light grey". */
+private fun backgroundList(spec: DocSpec): String {
+    val names = spec.backgrounds.map { backgroundName(BackgroundKind.fromKey(it)).lowercase(java.util.Locale.ROOT) }
+    return when {
+        names.isEmpty() -> "white"
+        names.size == 1 -> names.first()
+        else -> names.dropLast(1).joinToString(", ") + " or " + names.last()
     }
 }
 

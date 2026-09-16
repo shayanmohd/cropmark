@@ -2,6 +2,7 @@ package com.mohdshayan.cropmark.core.check
 
 import com.mohdshayan.cropmark.core.crop.CropResult
 import com.mohdshayan.cropmark.core.crop.FaceGeometry
+import com.mohdshayan.cropmark.core.spec.BackgroundKind
 import com.mohdshayan.cropmark.core.spec.DocSpec
 import kotlin.math.abs
 import kotlin.math.max
@@ -34,6 +35,8 @@ data class PhotoStats(
     val backgroundMean: Float = 1f,
     /** Mean luminance step between neighbouring samples: pattern such as bricks or tiles. */
     val backgroundTexture: Float = 0f,
+    /** Mean HSV saturation of the kept background: near zero for a white, grey or black wall. */
+    val backgroundSaturation: Float = 0f,
 )
 
 data class CheckInput(
@@ -44,6 +47,8 @@ data class CheckInput(
     val outputHeightPx: Int,
     /** The background is kept as shot but the crop reaches past the photo's edge, so the edge would be filled. */
     val keptBackgroundOverhangs: Boolean = false,
+    /** The colour painted behind the person, or [BackgroundKind.Keep] when the photo is used as shot. */
+    val background: BackgroundKind = BackgroundKind.Keep,
 )
 
 object ComplianceChecker {
@@ -59,6 +64,10 @@ object ComplianceChecker {
     const val BACKGROUND_MAX_STD = 0.07f
     const val BACKGROUND_MIN_LUMA = 0.6f
     const val BACKGROUND_MAX_TEXTURE = 0.035f
+    /** Above this luminance a neutral wall reads as white rather than as a light colour. */
+    const val BACKGROUND_WHITE_LUMA = 0.9f
+    /** Below this saturation a wall has no colour of its own: white, grey or black. */
+    const val BACKGROUND_NEUTRAL_SAT = 0.06f
     const val RESOLUTION_FACTOR = 0.8f
 
     fun run(input: CheckInput): List<CheckResult> {
@@ -100,7 +109,19 @@ object ComplianceChecker {
             results += CheckResult(CheckId.Lighting, diff <= LIGHTING_MAX_DIFF, measured = diff)
             val std = stats.backgroundStd
             val plain = std == null || (std <= BACKGROUND_MAX_STD && stats.backgroundMean >= BACKGROUND_MIN_LUMA && stats.backgroundTexture <= BACKGROUND_MAX_TEXTURE)
-            results += CheckResult(CheckId.Background, plain, measured = std ?: 0f)
+            // A colour the issuer does not allow is a rejection however evenly it is painted.
+            val wrongColour = input.background != BackgroundKind.Keep &&
+                spec.backgroundsExhaustive && input.background.key !in spec.backgrounds
+            // Only luma and saturation are measured, so this can say "that wall reads as white", never which light colour it is.
+            val readsWhite = std != null &&
+                stats.backgroundMean >= BACKGROUND_WHITE_LUMA && stats.backgroundSaturation <= BACKGROUND_NEUTRAL_SAT
+            results += when {
+                wrongColour -> CheckResult(CheckId.Background, false, measured = WRONG_COLOUR)
+                !plain -> CheckResult(CheckId.Background, false, measured = std ?: 0f)
+                spec.whiteBackgroundRejected && readsWhite ->
+                    CheckResult(CheckId.Background, false, advisory = true, measured = WHITE_BACKGROUND)
+                else -> CheckResult(CheckId.Background, true, measured = std ?: 0f)
+            }
         }
         if (input.keptBackgroundOverhangs) {
             // A filled strip is not the wall behind the person: the photo was shot too close.
@@ -114,6 +135,12 @@ object ComplianceChecker {
 
     /** Background check value meaning the crop runs past the photo's edge. */
     const val OVERHANG = -1f
+
+    /** Background check value meaning the chosen colour is not one this issuer allows. */
+    const val WRONG_COLOUR = -2f
+
+    /** Background check value meaning the wall as shot reads as white, which this issuer rejects. */
+    const val WHITE_BACKGROUND = -3f
 
     fun passedCount(results: List<CheckResult>): Int = results.count { it.passed }
 

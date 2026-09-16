@@ -45,8 +45,10 @@ object PhotoStatsCalc {
         var bgStd: Float? = null
         var bgMean = 1f
         var bgTexture = 0f
+        var bgSat = 0f
         if (keepBackground) {
             var s = 0.0; var s2 = 0.0; var c = 0
+            var satSum = 0.0
             var diffSum = 0.0; var diffN = 0
             val bstep = maxOf(1, (crop.width / 60f).toInt())
             var by = crop.top.toInt().coerceIn(0, h - 1)
@@ -64,6 +66,7 @@ object PhotoStatsCalc {
                     if (a < 0.1f) {
                         val l = luma(argb[by * w + bx]).toDouble()
                         s += l; s2 += l * l; c++
+                        satSum += saturation(argb[by * w + bx])
                         if (bx + bstep < w && by + bstep < h) {
                             diffSum += kotlin.math.abs(luma(argb[by * w + bx + bstep]) - l) + kotlin.math.abs(luma(argb[(by + bstep) * w + bx]) - l)
                             diffN += 2
@@ -77,6 +80,7 @@ object PhotoStatsCalc {
                 val mean = s / c
                 bgStd = sqrt((s2 / c - mean * mean).coerceAtLeast(0.0)).toFloat()
                 bgMean = mean.toFloat()
+                bgSat = (satSum / c).toFloat()
                 if (diffN > 0) bgTexture = (diffSum / diffN).toFloat()
             }
         }
@@ -87,9 +91,20 @@ object PhotoStatsCalc {
             backgroundStd = bgStd,
             backgroundMean = bgMean,
             backgroundTexture = bgTexture,
+            backgroundSaturation = bgSat,
         )
     }
 
     private fun luma(c: Int): Float =
         (0.2126f * ((c shr 16) and 0xFF) + 0.7152f * ((c shr 8) and 0xFF) + 0.0722f * (c and 0xFF)) / 255f
+
+    /** HSV saturation: how much colour the pixel carries, whatever its brightness. */
+    private fun saturation(c: Int): Float {
+        val r = (c shr 16) and 0xFF
+        val g = (c shr 8) and 0xFF
+        val b = c and 0xFF
+        val hi = maxOf(r, g, b)
+        if (hi == 0) return 0f
+        return (hi - minOf(r, g, b)).toFloat() / hi
+    }
 }

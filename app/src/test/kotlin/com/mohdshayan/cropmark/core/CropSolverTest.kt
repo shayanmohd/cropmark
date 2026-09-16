@@ -66,4 +66,26 @@ class CropSolverTest {
         assertEquals(80f - 70f * CrownFinder.FOREHEAD_TO_CROWN, guessed.y, 0.01f)
         assertTrue(CrownFinder.find(null, w, h, 50f, 80f, 150f, 20f).estimated)
     }
+
+    /** A turban, a chef's hat or a hood: the matte never opens inside the window the search allows. */
+    @Test fun aCoveringTallerThanTheSearchWindowIsEstimated() {
+        val w = 100
+        val h = 400
+        val solid = FloatArray(w * h) { 1f }
+        val r = CrownFinder.find(solid, w, h, 50f, 300f, 370f, 20f)
+        // The search stops 63 px above the forehead. Returning that row would call a hat the crown
+        // and shrink the face by more than a third, with every check still green.
+        assertTrue("the search limit is not a measurement", r.estimated)
+        assertEquals(CrownFinder.estimate(300f, 370f), r.y, 0.01f)
+    }
+
+    /** A head that runs off the top of the photo keeps the edge row, so the crop still reads as an overhang. */
+    @Test fun aHeadCutOffByThePhotoEdgeIsNotEstimatedAway() {
+        val w = 100
+        val h = 200
+        val solid = FloatArray(w * h) { 1f }
+        val r = CrownFinder.find(solid, w, h, 50f, 30f, 100f, 20f)
+        assertFalse(r.estimated)
+        assertEquals(0f, r.y, 0.01f)
+    }
 }

@@ -52,17 +52,7 @@ class FaceAnalyzer(private val context: Context) {
         val result = lm.detectForVideo(BitmapImageBuilder(bitmap).build(), timestampMs)
         val faces = result.faceLandmarks()
         if (faces.size != 1) return faces.size to null
-        val g = toGeometry(result, 1, 1)
-        fun x(v: Float) = if (mirror) 1f - v else v
-        return 1 to LiveFace(
-            crownY = g.crownY,
-            chinY = g.chinY,
-            eyeY = g.eyeY,
-            midX = x(g.midlineX),
-            rollDeg = g.rollDeg,
-            yawDeg = g.yawDeg,
-            pitchDeg = g.pitchDeg,
-        )
+        return 1 to LiveFace.from(toGeometry(result, bitmap.width, bitmap.height), mirror)
     }
 
     @Synchronized

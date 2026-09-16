@@ -30,7 +30,8 @@ fun TextPageScreen(kind: String, onBack: () -> Unit) {
     val title = if (kind == "privacy") "Privacy policy" else "Licences"
     val text by produceState<String?>(null, kind) {
         value = withContext(Dispatchers.IO) {
-            val files = if (kind == "privacy") listOf("privacy.txt") else listOf("licences/NOTICE.txt", "licences/OFL-SofiaSansCondensed.txt", "licences/OFL-PublicSans.txt")
+            val files = if (kind == "privacy") listOf("privacy.txt")
+            else listOf("licences/NOTICE.txt", "licences/APACHE-2.0.txt", "licences/OFL-SofiaSansCondensed.txt", "licences/OFL-PublicSans.txt")
             files.joinToString("\n\n") { f -> context.assets.open(f).bufferedReader().use { it.readText() } }
         }
     }

@@ -64,10 +64,15 @@ object Pipeline {
         return forSpec(edit, spec)
     }
 
-    private suspend fun startingBackground(spec: DocSpec): String {
-        val pref = ServiceLocator.appPrefs.settings.first().defaultBackground
-        return if (pref == "spec") spec.defaultBackground.key else pref
-    }
+    private suspend fun startingBackground(spec: DocSpec): String =
+        startingBackground(spec, ServiceLocator.appPrefs.settings.first().defaultBackground)
+
+    /**
+     * The colour a photo opens with: the global preference, unless the issuer's colour list is the
+     * whole rule and that preference is not on it.
+     */
+    fun startingBackground(spec: DocSpec, pref: String): String =
+        if (pref == "spec" || (spec.backgroundsExhaustive && pref !in spec.backgrounds)) spec.defaultBackground.key else pref
 
     /** An issuer that rejects edited photos gets the photo as shot: background kept, exposure untouched. */
     fun forSpec(edit: PhotoEdit, spec: DocSpec): PhotoEdit =

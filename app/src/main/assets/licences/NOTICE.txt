@@ -2,6 +2,11 @@ Licences
 
 MediaPipe Tasks Vision library
 Copyright The MediaPipe Authors. Apache License, Version 2.0.
+Its native library links in third party code under those components' own terms, among them Abseil,
+Eigen 3, FlatBuffers, Protocol Buffers, TensorFlow Lite, XNNPACK, RE2, ICU4C and zlib, covered by
+the Apache, BSD, MIT, Mozilla Public, zlib and Creative Commons licences. The full attribution
+notice for all of them is the file META-INF/NOTICE inside the MediaPipe tasks-vision library,
+published with it at maven.google.com.
 
 Face Landmarker model (face_landmarker.task) and Selfie Segmenter model (selfie_segmenter.tflite)
 Google MediaPipe models, bundled unchanged. Apache License, Version 2.0.
@@ -12,7 +17,8 @@ Apache License, Version 2.0.
 Google Play In-App Review library
 Play Core Software Development Kit Terms of Service.
 
-You may obtain a copy of the Apache License, Version 2.0 at apache.org/licenses/LICENSE-2.0
+The full text of the Apache License, Version 2.0 follows, then the SIL Open Font Licence for the
+two typefaces.
 
 Sofia Sans Condensed and Public Sans
-SIL Open Font License, Version 1.1. The full texts follow.
+SIL Open Font License, Version 1.1.

@@ -41,7 +41,9 @@ object PhotoRenderer {
         )
         val outH = SpecMath.formPixels(spec).second
         val overhangs = keep && CropSolver.overhangs(crop, session.width, session.height)
-        val checks = ComplianceChecker.run(CheckInput(spec, session.face, crop, stats, outH, overhangs))
+        // Without a matte nothing is painted, so the photo is used as shot whatever the edit asks for.
+        val background = if (keep) BackgroundKind.Keep else BackgroundKind.fromKey(edit.backgroundMode)
+        val checks = ComplianceChecker.run(CheckInput(spec, session.face, crop, stats, outH, overhangs, background))
         return Solved(crop, checks)
     }
 

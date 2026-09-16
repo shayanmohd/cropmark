@@ -34,20 +34,28 @@ object CrownFinder {
         val x0 = (midlineX - band).toInt().coerceIn(0, width - 1)
         val x1 = (midlineX + band).toInt().coerceIn(0, width - 1)
         val startY = foreheadY.toInt().coerceIn(0, height - 1)
-        val limitY = (foreheadY - faceH * 0.9f).toInt().coerceAtLeast(0)
+        val searchTop = foreheadY - faceH * 0.9f
+        val limitY = searchTop.toInt().coerceAtLeast(0)
 
         // The forehead itself must be inside the person, or the matte is not describing this face.
         if (rowMean(matte, width, startY, x0, x1) < 0.5f) return fallback
 
         var crown = limitY
+        var found = false
         var y = startY
         while (y > limitY) {
             if (rowMean(matte, width, y - 1, x0, x1) < 0.5f) {
                 crown = y
+                found = true
                 break
             }
             y--
         }
+        // Still solid person at the top of the search window: a tall turban, a chef's hat, a hood, or
+        // a wall that matted as person. Nothing was measured, so say so rather than return the limit
+        // as if it were the top of the head. A window cut short by the photo's own edge is different:
+        // there the head runs out of picture, and the clamped row keeps the overhang check honest.
+        if (!found && searchTop >= 0f) return fallback
         val gap = foreheadY - crown
         return if (gap < faceH * 0.06f) fallback else CrownResult(crown.toFloat(), estimated = false)
     }

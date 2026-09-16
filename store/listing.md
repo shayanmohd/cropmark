@@ -31,7 +31,7 @@ One face, head height, eye line, centring, tilt, facing the camera, eyes open, m
 US passport and DS-160 visa photo, India passport applications made abroad, India e-Visa, OCI card and PAN card, Canada visitor visa and China visa. Add your own size in millimetres or pixels, with its own resolution.
 
 Edits follow the issuer
-The US passport and visa, Canada visa, India passport and OCI rules reject photos changed with software, so for those documents Cropmark only crops and sizes the photo you took against a plain light wall. For the India e-Visa, PAN card, China visa and your own sizes you can replace the background with white, light blue, light grey or a light colour, with hair edges refined on the phone.
+The US passport and visa, Canada visa, India passport and OCI rules reject photos changed with software, so for those documents Cropmark only crops and sizes the photo you took against a plain light wall. For the India e-Visa, PAN card and your own sizes you can replace the background with white, light blue, light grey or a light colour, with hair edges refined on the phone. China names white and nothing else, so the China visa offers white.
 
 Form files and print sheets
 Exact pixels, the right dpi and a file size limit such as 240 KB, with no location or camera data in the file. 4x6 and 5x7 JPEG sheets for photo kiosks, A4 and Letter PDF sheets with a 50 mm check ruler. Save to your phone or share to any app.

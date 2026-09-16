@@ -80,4 +80,39 @@ class ComplianceTest {
         assertEquals(LiveHint.TiltLevel, LiveGuide.evaluate(1, face(crownY, crownY + headH, roll = 9f), frame, spec))
         assertEquals(LiveHint.Ready, LiveGuide.evaluate(1, face(crownY, crownY + headH), frame, spec))
     }
+
+    /**
+     * The viewfinder measures tilt on a 480 x 640 analysis frame. Normalising x and y by different
+     * pixel extents before the atan2 reported 4.5 degrees for a 6 degree tilt, so the live hint said
+     * Ready and the Checks screen then failed Level on the same head.
+     */
+    @Test fun theLiveRollIsTheAngleOnTheWallNotInTheFrame() {
+        val drop = (120f * kotlin.math.tan(Math.toRadians(6.0))).toFloat()
+        val frameFace = FaceGeometry(
+            faceCount = 1, imageWidth = 480, imageHeight = 640,
+            chinY = 420f, foreheadY = 260f, crownY = 228f,
+            leftEyeX = 180f, leftEyeY = 300f - drop / 2f, rightEyeX = 300f, rightEyeY = 300f + drop / 2f,
+            midlineX = 240f, faceLeftX = 150f, faceRightX = 330f,
+            rollDeg = FaceGeometry.rollFromEyes(180f, 300f - drop / 2f, 300f, 300f + drop / 2f),
+        )
+        val live = LiveFace.from(frameFace, mirror = false)
+        assertEquals(6f, live.rollDeg, 0.01f)
+        assertTrue(kotlin.math.abs(live.rollDeg) >= ComplianceChecker.MAX_ROLL)
+        // Positions are still normalised to the frame, which is what the guides compare against.
+        assertEquals(0.5f, live.midX, 1e-4f)
+        assertEquals(420f / 640f, live.chinY, 1e-4f)
+        assertEquals(228f / 640f, live.crownY, 1e-4f)
+        // The front lens mirrors the frame sideways; it does not make the head any more level.
+        val mirrored = LiveFace.from(frameFace.copy(midlineX = 120f), mirror = true)
+        assertEquals(0.75f, mirrored.midX, 1e-4f)
+        assertEquals(live.rollDeg, mirrored.rollDeg, 1e-6f)
+        // The hint and the still check now agree: this head is tilted.
+        val frame = LiveGuide.frameFor(spec, 3f / 4f)
+        val cx = frame.left + frame.width / 2f
+        val crown = frame.top + frame.height * 0.1f
+        val chin = crown + spec.headFraction.mid * frame.height
+        val inFrame = LiveFace(crown, chin, (crown + chin) / 2f, cx, live.rollDeg, 0f, 0f)
+        assertEquals(LiveHint.TiltLevel, LiveGuide.evaluate(1, inFrame, frame, spec))
+        assertFalse(run(base.copy(rollDeg = live.rollDeg))[CheckId.Level]!!.passed)
+    }
 }

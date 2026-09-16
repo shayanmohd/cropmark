@@ -119,6 +119,83 @@ class IssuerRuleTest {
         }
     }
 
+    /** A background the photo never had: std is null because the colour was painted on. */
+    private val replaced = PhotoStats(0.55f, 0.56f, 0.52f, backgroundStd = null)
+
+    private fun background(specId: String, kind: BackgroundKind, stats: PhotoStats) =
+        ComplianceChecker.run(
+            CheckInput(spec(specId), tight, CropSolver.solve(tight, spec(specId)), stats, 600, background = kind),
+        ).first { it.id == CheckId.Background }
+
+    /** visaforchina.cn: "white or close to white". White is the whole list, so light blue is a rejection. */
+    @Test fun aColourTheIssuerDoesNotAllowFailsTheBackgroundCheck() {
+        assertTrue(spec("cn-visa").backgroundsExhaustive)
+        for (kind in listOf(BackgroundKind.LightBlue, BackgroundKind.LightGrey, BackgroundKind.Custom)) {
+            val r = background("cn-visa", kind, replaced)
+            assertFalse("cn-visa with ${kind.key}", r.passed)
+            assertEquals(ComplianceChecker.WRONG_COLOUR, r.measured)
+        }
+        assertTrue(background("cn-visa", BackgroundKind.White, replaced).passed)
+        // Keeping the wall as shot is judged on evenness, not against the list.
+        assertTrue(background("cn-visa", BackgroundKind.Keep, kept).passed)
+    }
+
+    /**
+     * The e-Visa allows "plain light coloured or white" and PAN names no colour at all, so their
+     * lists are Cropmark's recommendation and a light tint stays compliant.
+     */
+    @Test fun anIssuerThatAllowsAFamilyOfColoursKeepsThePicker() {
+        for (id in listOf("in-evisa", "in-pan")) {
+            assertFalse("$id names a family, not a list", spec(id).backgroundsExhaustive)
+            assertTrue(id, background(id, BackgroundKind.LightBlue, replaced).passed)
+            assertTrue(id, background(id, BackgroundKind.LightGrey, replaced).passed)
+        }
+    }
+
+    /** A global starting colour is a preference, not permission to break an issuer's own list. */
+    @Test fun aGlobalStartingColourNeverOverridesAnIssuersList() {
+        assertEquals("white", Pipeline.startingBackground(spec("cn-visa"), "light_blue"))
+        assertEquals("white", Pipeline.startingBackground(spec("cn-visa"), "spec"))
+        assertEquals("light_blue", Pipeline.startingBackground(spec("in-evisa"), "light_blue"))
+        assertEquals("white", Pipeline.startingBackground(spec("in-evisa"), "spec"))
+    }
+
+    /**
+     * ociservices.gov.in: "plain light color background (not white)". Only luma and saturation are
+     * measured, so a near neutral wall that reads as white is an advisory, not a hard fail: the
+     * headline count stops claiming a colour the app never checked.
+     */
+    @Test fun ociWarnsWhenTheWallAsShotReadsAsWhite() {
+        assertTrue(spec("in-oci").whiteBackgroundRejected)
+        fun checks(mean: Float, sat: Float) = ComplianceChecker.run(
+            CheckInput(
+                spec("in-oci"), tight, CropSolver.solve(tight, spec("in-oci")),
+                PhotoStats(0.55f, 0.56f, 0.52f, backgroundStd = 0.02f, backgroundMean = mean, backgroundTexture = 0.01f, backgroundSaturation = sat),
+                200,
+            ),
+        )
+        val white = checks(0.95f, 0.01f)
+        val grey = checks(0.82f, 0.01f)
+        val row = white.first { it.id == CheckId.Background }
+        assertFalse(row.passed)
+        assertTrue(row.advisory)
+        assertEquals(ComplianceChecker.WHITE_BACKGROUND, row.measured)
+        assertEquals(ComplianceChecker.passedCount(grey) - 1, ComplianceChecker.passedCount(white))
+        // The light grey the row names passes, and so does a cream wall, which carries colour of its own.
+        assertTrue(grey.first { it.id == CheckId.Background }.passed)
+        assertTrue(checks(0.95f, 0.12f).first { it.id == CheckId.Background }.passed)
+        // Every other document is happy with a white wall.
+        assertTrue(
+            ComplianceChecker.run(
+                CheckInput(
+                    spec("us-passport"), tight, CropSolver.solve(tight, spec("us-passport")),
+                    PhotoStats(0.55f, 0.56f, 0.52f, backgroundStd = 0.02f, backgroundMean = 0.95f, backgroundTexture = 0.01f, backgroundSaturation = 0.01f),
+                    600,
+                ),
+            ).first { it.id == CheckId.Background }.passed,
+        )
+    }
+
     @Test fun facingCameraReportsTheAxisNearestItsLimit() {
         val us = spec("us-passport")
         fun facing(yaw: Float, pitch: Float) = ComplianceChecker.run(

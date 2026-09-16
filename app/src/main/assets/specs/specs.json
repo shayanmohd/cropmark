@@ -42,6 +42,7 @@
       "headPct": { "min": 49, "max": 69 }, "eyePct": { "min": 56, "max": 69 },
       "backgrounds": ["light_grey"],
       "editsAllowed": false,
+      "whiteBackgroundRejected": true,
       "notes": "Square JPEG from 200 x 200 to 900 x 900 px, 200 KB or less. Plain light coloured background, not white. Head 1 to 1 3/8 in on a 2 x 2 in photo, eyes 1 1/8 to 1 3/8 in up. Do not retouch or enhance the photo.",
       "sourceUrl": "https://ociservices.gov.in/onlineOCI/faq", "verifiedOn": "2026-09-14"
     },
@@ -70,6 +71,7 @@
       "print": { "widthMm": 33, "heightMm": 48, "label": "33 x 48 mm" },
       "headMm": { "min": 28, "max": 33 },
       "backgrounds": ["white"],
+      "backgroundsExhaustive": true,
       "notes": "33 x 48 mm colour photo, head 28 to 33 mm high and 15 to 22 mm wide, ears visible, white or near white background with no border. Print on glossy photo paper.",
       "sourceUrl": "https://www.visaforchina.cn/SYD3_EN/qianzhengyewu/jichuzhishi/changjianwenti/355135188537315328.html", "verifiedOn": "2026-09-14"
     }

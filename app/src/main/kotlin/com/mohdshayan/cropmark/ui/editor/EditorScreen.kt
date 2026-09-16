@@ -275,7 +275,12 @@ private fun Controls(
 private fun BackgroundTool(s: EditorUi.Ready, vm: EditorViewModel) {
     val c = Cropmark.colors
     var custom by rememberSaveable { mutableStateOf(false) }
-    val options = listOf(BackgroundKind.White, BackgroundKind.LightBlue, BackgroundKind.LightGrey, BackgroundKind.Custom, BackgroundKind.Keep)
+    // An issuer whose colour list is the whole rule offers only those colours, plus the photo as shot.
+    val options = if (s.spec.backgroundsExhaustive) {
+        s.spec.backgrounds.map { BackgroundKind.fromKey(it) }.distinct() + BackgroundKind.Keep
+    } else {
+        listOf(BackgroundKind.White, BackgroundKind.LightBlue, BackgroundKind.LightGrey, BackgroundKind.Custom, BackgroundKind.Keep)
+    }
     Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
         options.forEach { kind ->
             val selected = s.edit.backgroundMode == kind.key

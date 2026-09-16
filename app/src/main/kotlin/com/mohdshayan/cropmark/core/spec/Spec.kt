@@ -79,6 +79,17 @@ data class DocSpec(
      * (IRCC: "where the top of the head or skull would be if it could be seen").
      */
     val crownAtSkull: Boolean = false,
+    /**
+     * True when [backgrounds] is the issuer's whole rule, so replacing the background with any
+     * other colour is a breach. False where the issuer allows a family of colours ("plain light
+     * coloured") or names none at all, and the list is only Cropmark's recommendation.
+     */
+    val backgroundsExhaustive: Boolean = false,
+    /**
+     * True when the issuer rejects a white background outright (India OCI asks for a plain light
+     * colour that is not white), so a kept background that measures near white is worth a warning.
+     */
+    val whiteBackgroundRejected: Boolean = false,
 ) {
     /** Output width over height. Print size wins; a digital-only rule uses its pixel aspect. */
     val aspect: Float

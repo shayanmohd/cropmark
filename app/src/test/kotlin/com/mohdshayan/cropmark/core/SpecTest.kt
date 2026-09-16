@@ -68,6 +68,12 @@ class SpecTest {
         val oci = specs.first { it.id == "in-oci" }
         assertEquals(900 to 900, SpecMath.formPixels(oci, 5000))
         assertEquals(listOf("light_grey"), oci.backgrounds)
+        // The OCI portal asks for a light colour that is not white; the e-Visa and PAN name a family or none.
+        assertTrue(oci.whiteBackgroundRejected)
+        assertTrue(specs.first { it.id == "cn-visa" }.backgroundsExhaustive)
+        for (id in listOf("in-evisa", "in-pan", "in-oci")) {
+            assertTrue("$id names no closed list", !specs.first { it.id == id }.backgroundsExhaustive)
+        }
 
         val cn = specs.first { it.id == "cn-visa" }
         assertEquals(390 to 567, SpecMath.formPixels(cn))

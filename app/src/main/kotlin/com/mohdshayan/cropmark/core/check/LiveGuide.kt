@@ -1,5 +1,6 @@
 package com.mohdshayan.cropmark.core.check
 
+import com.mohdshayan.cropmark.core.crop.FaceGeometry
 import com.mohdshayan.cropmark.core.spec.DocSpec
 import kotlin.math.abs
 import kotlin.math.max
@@ -15,7 +16,28 @@ data class LiveFace(
     val rollDeg: Float,
     val yawDeg: Float,
     val pitchDeg: Float,
-)
+) {
+    companion object {
+        /**
+         * A face measured in the frame's own pixels, normalised to it. The angles are measured
+         * before normalising: an atan2 over axes scaled differently is not the angle on the wall.
+         */
+        fun from(g: FaceGeometry, mirror: Boolean): LiveFace {
+            val w = g.imageWidth.toFloat().coerceAtLeast(1f)
+            val h = g.imageHeight.toFloat().coerceAtLeast(1f)
+            val midX = g.midlineX / w
+            return LiveFace(
+                crownY = g.crownY / h,
+                chinY = g.chinY / h,
+                eyeY = g.eyeY / h,
+                midX = if (mirror) 1f - midX else midX,
+                rollDeg = g.rollDeg,
+                yawDeg = g.yawDeg,
+                pitchDeg = g.pitchDeg,
+            )
+        }
+    }
+}
 
 /** Where the spec frame sits in the viewfinder, normalised the same way. */
 data class FrameRect(val left: Float, val top: Float, val width: Float, val height: Float) {
